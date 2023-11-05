@@ -49,48 +49,7 @@ CNumber& CNumber::operator=(int iValue) {
 	}
 	return *this;
 }
-void CNumber::v_ToStr() {
-	int i_start_index = 0;
-	while (pi_table[i_start_index] == 0) {
-		i_start_index++;
-	}
-	for (int i = i_start_index; i < i_length; i++) {
-		std::cout << pi_table[i];
-	}
-}
-bool CNumber::b_copy_values(const CNumber& pcOther) {
-	for (int i = 0; i < i_length; i++) {
-		pi_table[i] = pcOther.pi_table[i];
-	}
-	return true;
-}
-bool CNumber::b_copy_variables(const CNumber& pcOther) {
-	delete[] pi_table;
-	i_length = pcOther.i_length;
-	pi_table = new int[i_length];
-	return true;
-}
-void CNumber::v_fill_with_values(int iValue, int iTmp) {
-	while (iTmp >= 0) {
-		pi_table[iTmp] = iValue % 10;
-		iTmp--;
-		iValue/=10;
-	}
-}
-int CNumber::i_getValueLength(int iValue) {
-	int i_tmpLength = 0;
-	int i_tmp = iValue;
-	while (i_tmp != 0) {
-		i_tmp /= 10;
-		i_tmpLength++;
-	}
-	return i_tmpLength;
-}
-void CNumber::v_fill_table(int iValue) {
-	for (int i = 0; i < i_length; i++) {
-		pi_table[i] = iValue;
-	}
-}
+
 CNumber CNumber::operator+(const CNumber& pcNewVal) {
 	CNumber c_result;
 	if (pcNewVal.b_is_negative == b_is_negative) {
@@ -166,7 +125,7 @@ CNumber CNumber::operator/(const CNumber& pcNewVal) {
 	CNumber tmpOther;
 	CNumber c_iter;
 	c_iter = 1;
-	c_result = 0;
+	c_result = -1;
 	if (pcNewVal.i_length > i_length || pcNewVal == 0) {
 		return CNumber();
 	}
@@ -179,11 +138,9 @@ CNumber CNumber::operator/(const CNumber& pcNewVal) {
 		tmpOther.v_set_is_negative(false);
 		while (c_tmp >= tmpOther) {
 			c_tmp = c_tmp - tmpOther;
-			c_result = c_result + c_iter;
+			c_result = c_result+c_iter;
 		}
 		c_result.b_is_negative = (b_is_negative != pcNewVal.b_is_negative);
-	
-
 		return c_result;
 	}
 }
@@ -206,6 +163,54 @@ bool CNumber::operator>=(const CNumber& cOther) const {
 		}
 	}
 	return true;
+}
+
+
+void CNumber::v_ToStr() {
+	if (b_is_negative) {
+		std::cout << "-";
+	}
+	int i_start_index = 0;
+	while (pi_table[i_start_index] == 0) {
+		i_start_index++;
+	}
+	for (int i = i_start_index; i < i_length; i++) {
+		std::cout << pi_table[i];
+	}
+}
+bool CNumber::b_copy_values(const CNumber& pcOther) {
+	for (int i = 0; i < i_length; i++) {
+		pi_table[i] = pcOther.pi_table[i];
+	}
+	return true;
+}
+bool CNumber::b_copy_variables(const CNumber& pcOther) {
+	delete[] pi_table;
+	i_length = pcOther.i_length;
+	pi_table = new int[i_length];
+	b_is_negative = pcOther.b_is_negative;
+	return true;
+}
+void CNumber::v_fill_with_values(int iValue, int iTmp) {
+	while (iTmp >= 0) {
+		pi_table[iTmp] = iValue % 10;
+		iTmp--;
+		iValue /= 10;
+	}
+}
+int CNumber::i_getValueLength(int iValue) {
+	int i_tmpLength = 0;
+	int i_tmp = iValue;
+	while (i_tmp != 0) {
+		i_tmp /= 10;
+		i_tmpLength++;
+	}
+	return i_tmpLength;
+}
+void CNumber::v_fill_table(int iValue) {
+	for (int i = 0; i < i_length; i++) {
+		pi_table[i] = iValue;
+	}
 }
 
 void CNumber::v_addHelper(const CNumber& pcOther, CNumber& cResult) {
@@ -256,11 +261,11 @@ std::string CNumber::sToStr()
 {
 	std::ostringstream oss;
 	int i_start_index = 0;
-	while (pi_table[i_start_index] == 0) {
-		i_start_index++;
-	}
 	if (b_is_negative) {
 		oss << "-";
+	}
+	while (pi_table[i_start_index] == 0) {
+		i_start_index++;
 	}
 	for (int i = i_start_index; i < i_length; i++) {
 		oss << pi_table[i];
@@ -273,49 +278,61 @@ int main() {
 	CNumber c_num_0, c_num_1,c_num_2,c_num_3,c_num_4,c_num_5,c_res_1,c_res_2,c_res_3;
 	CNumber c_sub_res_1, c_sub_res_2, c_sub_res_3;
 	CNumber c_mul_res_1, c_mul_res_2;
-	CNumber c_div_res_1;
-	c_num_4 = -10;
-	c_num_5 = 1;
+	CNumber c_div_res_1, c_div_res_2;
 	c_num_0 = 1200;
 	c_num_1 = 900;
 	c_num_2 = -1100;
 	c_num_3 = -500;
+	c_num_4 = 10;
+	c_num_5 = 1;
+	std::cout << "Dodawanie:";
 	std::cout << std::endl;
 	std::cout << "1200+900 = ";
 	c_res_1 = c_num_0 + c_num_1;
-	c_res_1.v_ToStr();
+	std::cout<<c_res_1.sToStr();
 	std::cout << std::endl;
 	std::cout << "-1100+(-500) = ";
 	c_res_2 = c_num_2 + c_num_3;
-	c_res_2.v_ToStr();
+	std::cout << c_res_2.sToStr();
 	std::cout << std::endl;
 	std::cout << "1200+(-1100) = ";
 	c_res_3 = c_num_0 + c_num_2;
-	c_res_3.v_ToStr();
+	std::cout << c_res_3.sToStr();
+	std::cout << std::endl;
+	std::cout << "Odejmowanie:";
 	std::cout << std::endl;
 	std::cout << "900-1200 = ";
 	c_sub_res_1 = c_num_1 - c_num_0;
-	c_sub_res_1.v_ToStr();
+	std::cout << c_sub_res_1.sToStr();
 	std::cout << std::endl;
 	c_sub_res_2 = c_num_0 - c_num_2;
 	std::cout << "1200-(-1100) = ";
-	c_sub_res_2.v_ToStr();
+	std::cout << c_sub_res_2.sToStr();
 	std::cout << std::endl;
 	std::cout << "-500-(-1100) = ";
 	c_sub_res_3 = c_num_3 - c_num_2;
-	c_sub_res_3.v_ToStr();
+	std::cout << c_sub_res_3.sToStr();
+	std::cout << std::endl;
+	std::cout << "Mno¿enie:";
 	std::cout << std::endl;
 	std::cout << "1200*900 = ";
 	c_mul_res_1 = c_num_0 * c_num_1;
-	c_mul_res_1.v_ToStr();
+	std::cout << c_mul_res_1.sToStr();
 	std::cout << std::endl;
 	std::cout << "1200*(-1100)= ";
 	c_mul_res_2 = c_num_0 * c_num_2;
-	c_mul_res_2.v_ToStr();
+	std::cout << c_mul_res_2.sToStr();
+	std::cout << std::endl;
+	std::cout << "Dzielenie:";
 	std::cout << std::endl;
 	std::cout << "1200/10 = ";
 	c_div_res_1 = c_num_0 / c_num_4;
 	c_div_res_1.v_ToStr();
+	std::cout << std::endl;
+	std::cout << "1200/(-1100) = ";
+	c_div_res_2 = c_num_0 / c_num_2;
+	std::cout << c_div_res_2.sToStr();
+	std::cout << std::endl;
 }
 
 
