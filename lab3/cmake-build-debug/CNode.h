@@ -9,6 +9,7 @@
 class CNode {
 private:
     int x;
+    int y:
 public:
     CNode();
     void print();
