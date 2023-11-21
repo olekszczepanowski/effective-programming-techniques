@@ -9,7 +9,7 @@
 class CNode {
 private:
     int x;
-    int y:
+    int y;
 public:
     CNode();
     void print();
