@@ -3,9 +3,8 @@
 #include "cmake-build-debug/CTree.h"
 
 int main() {
-    CNode cnode;
-    cnode.print();
-    CTree ctree;
-    ctree.v_print();
+    vector<string> formula = {"*","2","5"};
+    CTree ctree(formula);
+    cout<<ctree.treeValue();
     return 0;
 }

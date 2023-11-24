@@ -16,13 +16,13 @@ CNode::CNode() {
     children = nullptr;
     parent = nullptr;
     childrenCount = 0;
-    tmpChildrenCount = 0;
+    currChildrenCount = 0;
     value = DEFAULT_VALUE;
 }
 CNode::CNode(CNode *newParent, string newValue) {
     parent = newParent;
     value = newValue;
-    tmpChildrenCount = 0;
+    currChildrenCount = 0;
     if(newValue[0] == ADDITION || newValue[0] == SUBSTRACTION || newValue[0] == MULTIPLICATION || newValue[0] == DIVISION ){
         childrenCount = 2;
         children = new CNode[2];
@@ -39,7 +39,7 @@ CNode::CNode(CNode *newParent, string newValue) {
 CNode::CNode(CNode &refNode) {
     value = refNode.value;
     childrenCount = refNode.childrenCount;
-    tmpChildrenCount = refNode.tmpChildrenCount;
+    currChildrenCount = refNode.currChildrenCount;
     if(refNode.parent==nullptr)
         parent = nullptr;
     switch(childrenCount){
@@ -115,5 +115,13 @@ int CNode::getChildrenCount() const {
 }
 string CNode::getValue() {
     return value;
+}
+
+int CNode::getCurrChildrenCount() const {
+    return currChildrenCount;
+}
+
+void CNode::setCurrChildrenCount(int newValue) {
+    currChildrenCount=newValue;
 }
 

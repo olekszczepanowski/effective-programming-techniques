@@ -17,6 +17,9 @@ public:
     CTree();
     CTree(CNode* newRoot);
     CTree(vector<string> formula);
+    CTree(const CTree& other);
+    ~CTree();
+    double treeValue();
 };
 
 bool isVariable(string sValue);

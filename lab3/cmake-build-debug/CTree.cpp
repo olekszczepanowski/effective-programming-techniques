@@ -21,25 +21,25 @@ CTree::CTree(vector<string> formula) {
     CNode *parent = root;
     CNode *child = root;
     for(int i = 1 ; i<formula.size(); i++){
-        while((parent->getParent()!= nullptr) && parent->getChildrenCount() == parent->getTmpChildrenCount()){
+        while((parent->getParent()!= nullptr) && parent->getChildrenCount() == parent->getCurrChildrenCount()){
             parent = parent->getParent();
         }
-        if(parent->getChildrenCount()!=parent->getTmpChildrenCount()){
+        if(parent->getChildrenCount()!= parent->getCurrChildrenCount()){
             child = new CNode(parent,formula[i]);
-            parent->getChildren()[parent->getTmpChildrenCount()] = *child;
+            parent->getChildren()[parent->getCurrChildrenCount()] = *child;
             if(child->getChildrenCount()==0 && isVariable(child->getValue()))
-                variables[(parent->getChildren()[parent->getTmpChildrenCount()]).getValue()] = NULL;
-            parent->setTmpChildrenCount(parent->getTmpChildrenCount()+1);
-            parent = &(parent->getChildren()[parent->getTmpChildrenCount()-1]);
+                variables[(parent->getChildren()[parent->getCurrChildrenCount()]).getValue()] = NULL;
+            parent->setCurrChildrenCount(parent->getCurrChildrenCount() + 1);
+            parent = &(parent->getChildren()[parent->getCurrChildrenCount() - 1]);
         }
         else{
             isFixed = true;
         }
     }
-    if(parent->getChildrenCount() != parent->getTmpChildrenCount()){
+    if(parent->getChildrenCount() != parent->getCurrChildrenCount()){
         isFixed = true;
     }
-    while (parent->getChildrenCount() != parent->getTmpChildrenCount()){
+    while (parent->getChildrenCount() != parent->getCurrChildrenCount()){
         switch (parent->getValue()[0]){
             case ADDITION:
                 child = new CNode(parent, ADDITION_DEFAULT);
@@ -54,12 +54,31 @@ CTree::CTree(vector<string> formula) {
                 child = new CNode(parent, MULTIPLICATION_DEFAULT);
                 break;
         }
-        parent->getChildren()[parent->getTmpChildrenCount()] = *child;
-        parent->setTmpChildrenCount(parent->getTmpChildrenCount()+1);
-        if(parent->getParent() != nullptr && parent->getTmpChildrenCount() == parent->getChildrenCount())
+        parent->getChildren()[parent->getCurrChildrenCount()] = *child;
+        parent->setCurrChildrenCount(parent->getCurrChildrenCount() + 1);
+        if(parent->getParent() != nullptr && parent->getCurrChildrenCount() == parent->getChildrenCount())
             parent = parent->getParent();
     }
 }
+
+CTree::CTree(const CTree &other) {
+    isFixed = other.isFixed;
+    root = new CNode(*other.root);
+    map<string, double> tmpMap = other.variables;
+    map<string, double>::iterator it;
+    for (it = tmpMap.begin(); it != tmpMap.end(); it++)
+        variables[it->first] = it->second;
+}
+
+CTree::~CTree() {
+    delete root;
+}
+
+double CTree::treeValue() {
+    return root->calculate(variables);
+}
+
+
 bool isVariable(string value) {
     for(int i = 0 ; i < value.length(); i++){
         if(!isdigit(value[i]))

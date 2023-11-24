@@ -12,7 +12,7 @@ private:
     CNode *children;
     CNode *parent;
     int childrenCount;
-    int tmpChildrenCount;
+    int currChildrenCount;
     string value;
 public:
     CNode();
@@ -25,8 +25,8 @@ public:
     CNode* getParent();
     void setParent(CNode *newParent);
     int getChildrenCount() const;
-    int getTmpChildrenCount() const;
-    void setTmpChildrenCount(int newValue);
+    int getCurrChildrenCount() const;
+    void setCurrChildrenCount(int newValue);
     string getValue();
 };
 static const char DEFAULT_VALUE = ' ';
