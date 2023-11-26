@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <sstream>
 #include "CTree.h"
 using namespace std;
 CTree::CTree() {
@@ -77,6 +78,99 @@ CTree::~CTree() {
 double CTree::treeValue() {
     return root->calculate(variables);
 }
+
+string CTree::variablesToString() {
+    map<string, double>::iterator itr;
+    string output;
+    for(itr = variables.begin(); itr != variables.end(); itr++)
+        output += ((*itr).first + DEFAULT_VALUE);
+    return output;
+}
+
+string CTree::prefix() {
+    return root->prefix("");
+}
+
+bool CTree::getIsFixed() {
+    return isFixed;
+}
+
+bool CTree::setVariables(vector<string> values) {
+    if(values.size()!=variables.size()){
+        cout<<"Zla ilosc zmiennych"<<endl;
+        return false;
+    }
+    if(variables.size()==0)
+        return true;
+    map<string, double>::iterator itr;
+    int i = 0;
+    for (itr = variables.begin(); itr != variables.end(); itr++) {
+        (*itr).second = stod(values[i]);
+        i++;
+    }
+    return true;
+}
+
+map<string, double> CTree::getVariables() {
+    return variables;
+}
+
+void CTree::operator=(const CTree& newTree) {
+    delete root;
+    root = new CNode(*newTree.root);
+    variables.clear();
+    map<string, double> tmpMap = newTree.variables;
+    map<string, double>::iterator itr;
+    for(itr = tmpMap.begin(); itr != tmpMap.end(); itr++){
+        variables[itr->first] = itr->second;
+    }
+}
+
+CTree CTree::operator+(const CTree& newTree) {
+    CTree* returnTree = new CTree(*this);
+    CTree* addedElem = new CTree(newTree);
+    CNode* tmp = returnTree->root;
+    while(tmp->getChildrenCount()!=0){
+        tmp = &tmp->getChildren()[0];
+    }
+    if(isVariable(tmp->getValue()))
+        returnTree->variables.erase(tmp->getValue());
+    CNode* parent = tmp->getParent();
+    parent->getChildren()[0] = *addedElem->root;
+    addedElem->root->setParent(parent);
+
+    map<string, double>::iterator it;
+    for (it = addedElem->variables.begin(); it != addedElem->variables.end(); it++)
+        returnTree->variables[it->first] = it->second;
+
+    addedElem = nullptr;
+    parent = nullptr;
+    return (*returnTree);
+}
+
+void CTree::join(CTree *newTree) {
+    *this = *this + *newTree;
+}
+
+vector<string> stringToVec(string input) {
+    vector<string> vecResult;
+    stringstream ss(input);
+    string tmp;
+    while (getline(ss, tmp, DEFAULT_VALUE)) {
+        vecResult.push_back(tmp);
+    }
+    return vecResult;
+}
+
+string vecToString(vector<string> vecInput, char connector) {
+    string output = vecInput[0];
+    for (int i = 1; i < vecInput.size(); i++) {
+        output += DEFAULT_VALUE;
+        output += connector;
+        output += DEFAULT_VALUE;
+        output += vecInput[i];
+    }
+    return output;}
 
 
 bool isVariable(string value) {

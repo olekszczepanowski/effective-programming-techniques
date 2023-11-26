@@ -20,8 +20,18 @@ public:
     CTree(const CTree& other);
     ~CTree();
     double treeValue();
-};
+    string variablesToString();
+    string prefix();
+    bool getIsFixed();
+    bool setVariables(vector<string> values);
+    map<string, double> getVariables();
+    void join(CTree* newTree);
+    void operator=(const CTree& newTree);
+    CTree operator+(const CTree& newTree);
 
+};
+vector<string> stringToVec(string input);
+string vecToString(vector<string> vecInput, char connector);
 bool isVariable(string sValue);
 static const string MULTIPLICATION_DEFAULT = "1";
 static const string ADDITION_DEFAULT = "0";
