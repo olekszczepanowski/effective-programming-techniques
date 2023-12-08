@@ -35,6 +35,8 @@ public:
 vector<string> stringToVec(string input);
 string vecToString(vector<string> vecInput, char connector);
 bool isVariable(string sValue);
+
+//Stale
 static const string MULTIPLICATION_DEFAULT = "1";
 static const string ADDITION_DEFAULT = "0";
 
