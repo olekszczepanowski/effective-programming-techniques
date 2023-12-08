@@ -1,3 +1,0 @@
-C:/Users/oleks/OneDrive/Pulpit/coding/tep_git/effective-programming-techniques/lab3/cmake-build-debug/CMakeFiles/lab3.dir
-C:/Users/oleks/OneDrive/Pulpit/coding/tep_git/effective-programming-techniques/lab3/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/oleks/OneDrive/Pulpit/coding/tep_git/effective-programming-techniques/lab3/cmake-build-debug/CMakeFiles/rebuild_cache.dir

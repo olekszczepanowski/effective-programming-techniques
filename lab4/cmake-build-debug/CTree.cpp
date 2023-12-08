@@ -1,3 +1,4 @@
+
 //
 // Created by oleks on 08.12.2023.
 //
@@ -180,3 +181,4 @@ bool isVariable(string value) {
     }
     return false;
 }
+

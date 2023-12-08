@@ -43,3 +43,4 @@ static const string COS = "cos";
 
 
 #endif //LAB4_CNODE_H
+
